@@ -1,7 +1,7 @@
 
 import SwiftUI
 
-struct GeometryReaderBootcamp: View {
+struct GeometryReaderBootcamp1: View {
 
     func getPercentage(geo: GeometryProxy) -> Double {
         let maxDistance = UIScreen.main.bounds.width / 2 // 画面幅の半分を最大距離とする
@@ -29,5 +29,5 @@ struct GeometryReaderBootcamp: View {
 }
 
 #Preview {
-    GeometryReaderBootcamp()
+    GeometryReaderBootcamp1()
 }

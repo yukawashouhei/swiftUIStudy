@@ -8,120 +8,204 @@
 import SwiftUI
 
 struct LayoutStudy: View {
+    @State private var isAnimating = false
+    
     var body: some View {
-        
-        // プロフィールカードの例
-        HStack(spacing: 15) {
-            // 1. アイコン画像
-            Image(systemName: "person.crop.circle.fill")
-                .font(.system(size: 60))
-                .foregroundColor(.gray)
-
-            // 2. 名前の部分（VStackで縦に並べる）
-            VStack(alignment: .leading, spacing: 4) {
-                Text("山田 太郎")
-                    .font(.headline) // 太字の見出し
-                Text("ソフトウェアエンジニア")
-                    .font(.subheadline) // 少し小さいサブ見出し
-                    .foregroundColor(.secondary) // 少し薄い色
+        ZStack {
+            // 背景グラデーション
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    Color(.systemBackground),
+                    Color(.systemGray6)
+                ]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+            
+            ScrollView {
+                VStack(spacing: 20) {
+                    // プロフェッショナルなプロフィールカード
+                    ProfessionalProfileCard()
+                    
+                    // スキルセクション
+                    SkillsSection()
+                    
+                    // 統計カード
+                    StatsSection()
+                }
+                .padding()
             }
-
-            Spacer() // 右側に空間を作る
         }
-        .padding() // 全体に余白
-        .background(Color(.systemGray6)) // 薄いグレーの背景
-        .cornerRadius(12) // 角を丸くする
-        .shadow(radius: 5) // 影をつける
-        .padding() // カードの外側にも少し余白
-        
-//        ZStack {
-//            // 背景色を画面全体に広げる
-//            Color.blue
-//                .ignoresSafeArea()
-//
-//            Text("セーフエリアを無視")
-//                .foregroundColor(.white)
-//        }
-        
-//        GeometryReader { geometry in
-//            VStack {
-//                ZStack {
-//                    // 背景色を画面全体に広げる
-//                    Color.blue
-//                        .ignoresSafeArea()
-//
-//                    Text("セーフエリアを無視")
-//                        .foregroundColor(.white)
-//                }
-//                Text("画面の横幅は \(geometry.size.width) ポイントです")
-//
-//                Rectangle()
-//                    .fill(Color.red)
-//                // 親ビュー(GeometryReader)の幅の半分
-//                    .frame(width: geometry.size.width * 0.5)
-//                    .frame(height: 50)
-//            }
-//        }
-//        .padding()
-        //        VStack {
-        //            Text("設定項目 A")
-        //            Divider() // 水平の区切り線
-        //            Text("設定項目 B")
-        //        }
-        //        .padding()
-        //        HStack {
-        //            Text("左端のテキスト")
-        //            Spacer() // ここがグーっと広がる
-        //            Text("右端のテキスト")
-        //        }
-        //        .padding()
-        //
-        //        VStack {
-        //            Text("上部のテキスト")
-        //            Spacer() // ここがグーっと広がる
-        //            Text("下部のテキスト")
-        //        }
-        //        .frame(height: 150)
-        //        .padding()
-        // 悪い例
-        //        Text("こんにちは")
-        //            .background(Color.green) // 先に背景色を設定
-        //            .padding()               // その後で余白を追加
-        //        // → 緑色の背景の「外側」に余白ができる
-        //
-        //        // 良い例
-        //        Text("こんにちは")
-        //            .padding()               // 先に余白を追加
-        //            .background(Color.green) // その後で背景色を設定
-        // → 余白を含めた全体が緑色になる
-        //        VStack(spacing: 20) { // spacingでビュー間の間隔を指定
-        //            Text("アイテム1")
-        //            Text("アイテム2")
-        //            Text("アイテム3")
-        //        }
-        //        .padding() // VStack全体に余白を追加
-        //        .background(Color.yellow) // 背景色を設定
-        //
-        //
-        //        ZStack {
-        //            // 一番奥の背景
-        //            Color.indigo
-        //
-        //            // 中間の要素
-        //            Image(systemName: "moon.stars.fill")
-        //                .resizable()
-        //                .scaledToFit()
-        //                .frame(width: 150)
-        //                .foregroundColor(.yellow)
-        //
-        //            // 一番手前の要素
-        //            Text("おやすみなさい")
-        //                .font(.caption)
-        //                .foregroundColor(.white)
-        //                .padding(.top, 100) // 上から少しずらす
-        //        }
-        //        .frame(width: 205, height: 205) // ZStack自体のサイズを指定
-        
+    }
+}
+
+struct ProfessionalProfileCard: View {
+    @State private var isAnimating = false
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // ヘッダー部分（単色の青背景）
+            ZStack {
+                Color.blue
+                
+                VStack(spacing: 10) {
+                    // プロフィール画像
+                    ZStack {
+                        Circle()
+                            .fill(Color.white.opacity(0.2))
+                            .frame(width: 70, height: 70)
+                        
+                        Image(systemName: "person.crop.circle.fill")
+                            .font(.system(size: 40))
+                            .foregroundColor(.white)
+                            .scaleEffect(isAnimating ? 1.05 : 1.0)
+                            .animation(.easeInOut(duration: 2).repeatForever(autoreverses: true), value: isAnimating)
+                    }
+                    
+                    VStack(spacing: 2) {
+                        Text("山田 太郎")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                        
+                        Text("シニアソフトウェアエンジニア")
+                            .font(.caption2)
+                            .foregroundColor(.white.opacity(0.9))
+                    }
+                }
+                .padding(.vertical, 20)
+            }
+            
+            // 詳細情報部分
+            VStack(spacing: 12) {
+                // 連絡先情報（一列表示）
+                VStack(spacing: 6) {
+                    ContactInfoItem(icon: "envelope.fill", text: "yamada@example.com")
+                    ContactInfoItem(icon: "phone.fill", text: "+81-90-1234-5678")
+                }
+                
+                // 場所情報（一列表示）
+                HStack {
+                    Image(systemName: "location.fill")
+                        .foregroundColor(.blue)
+                        .font(.caption2)
+                    Text("東京都渋谷区")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                }
+                
+                // 自己紹介（一列表示）
+                Text("5年以上の経験を持つフルスタックエンジニア。SwiftUI、React、Node.jsを専門とし、ユーザー体験を重視したアプリケーション開発に従事しています。")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(nil)
+            }
+            .padding(14)
+        }
+        .background(Color(.systemBackground))
+        .cornerRadius(14)
+        .shadow(color: Color.black.opacity(0.06), radius: 10, x: 0, y: 3)
+        .onAppear {
+            isAnimating = true
+        }
+    }
+}
+
+struct ContactInfoItem: View {
+    let icon: String
+    let text: String
+    
+    var body: some View {
+        HStack(spacing: 5) {
+            Image(systemName: icon)
+                .foregroundColor(.blue)
+                .font(.caption2)
+            Text(text)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+            Spacer()
+        }
+    }
+}
+
+struct SkillsSection: View {
+    let skills = ["SwiftUI", "React", "Node.js", "Python", "AWS", "Docker"]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("スキル")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .foregroundColor(.primary)
+            
+            // スキルを一列で表示
+            HStack(spacing: 6) {
+                ForEach(skills, id: \.self) { skill in
+                    SkillBadge(skill: skill)
+                }
+                Spacer()
+            }
+        }
+        .padding(14)
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.04), radius: 8, x: 0, y: 2)
+    }
+}
+
+struct SkillBadge: View {
+    let skill: String
+    
+    var body: some View {
+        Text(skill)
+            .font(.caption2)
+            .fontWeight(.medium)
+            .foregroundColor(.white)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(Color.blue)
+            .cornerRadius(12)
+    }
+}
+
+struct StatsSection: View {
+    var body: some View {
+        HStack(spacing: 10) {
+            StatCard(title: "プロジェクト", value: "47", icon: "folder.fill")
+            StatCard(title: "経験年数", value: "5+", icon: "clock.fill")
+            StatCard(title: "クライアント", value: "23", icon: "person.2.fill")
+        }
+    }
+}
+
+struct StatCard: View {
+    let title: String
+    let value: String
+    let icon: String
+    
+    var body: some View {
+        VStack(spacing: 6) {
+            Image(systemName: icon)
+                .font(.subheadline)
+                .foregroundColor(.blue)
+            
+            Text(value)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .foregroundColor(.primary)
+            
+            Text(title)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 12)
+        .background(Color(.systemBackground))
+        .cornerRadius(10)
+        .shadow(color: Color.black.opacity(0.03), radius: 6, x: 0, y: 1)
     }
 }
 
